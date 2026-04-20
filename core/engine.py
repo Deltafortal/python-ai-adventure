@@ -22,7 +22,7 @@ class GameEngine:
 
     def run(self):
         while self.is_running:
-            node = self.provider.get_node(self.current_node_id)
+            node = self.provider.get_node(self.current_node_id, self.player.lore)
             
             if not node:
                 self.ui.display_text(f"Error: Node '{self.current_node_id}' not found.")
