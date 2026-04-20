@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "title": "La Caverna del Destino",
+    "start_node": "character_creation"
+  },
+  "nodes": {
+    "character_creation": {
+      "text": "Benvenuto avventuriero. Prima di iniziare, chi sei? Qual è il tuo background e quali sono i tuoi ideali?",
+      "actions": [
+        {
+          "type": "input",
+          "save_as": "player_lore",
+          "target": "intro_01"
+        }
+      ]
+    },
+    "intro_01": {
+      "text": "L'aria è umida. Ti trovi davanti all'ingresso di una caverna oscura. Senti dei rumori provenire dall'interno.",
+      "actions": [
+        {
+          "type": "choice",
+          "options": [
+            {"label": "Accendi la torcia ed entra", "target": "cave_entrance"},
+            {"label": "Fuggi via come un codardo", "target": "game_over_flee"}
+          ]
+        }
+      ]
+    },
+    "cave_entrance": {
+      "text": "La luce della torcia rivela un piccolo accampamento. Ci sono dei mostri che ti stavano tendendo un'imboscata!",
+      "actions": [
+        {
+          "type": "combat",
+          "enemies": [
+            {"id": "goblin_warrior", "quantity": 5},
+            {"id": "goblin_archer", "quantity": 2}
+          ],
+          "on_victory": "loot_room",
+          "on_defeat": "game_over_death"
+        }
+      ]
+    },
+    "loot_room": {
+      "text": "Con l'ultimo colpo, i nemici cadono. Tiri un sospiro di sollievo e avanzi nella stanza successiva.",
+      "actions": [
+        {"type": "goto", "target": "treasure_room"}
+      ]
+    },
+    "treasure_room": {
+      "text": "Trovi un enorme forziere pieno d'oro! Hai vinto!",
+      "actions": [
+        {"type": "end_game"}
+      ]
+    },
+    "game_over_flee": {
+      "text": "Sei fuggito in preda al panico. Forse l'avventura non fa per te.",
+      "actions": [
+        {"type": "end_game"}
+      ]
+    },
+    "game_over_death": {
+      "text": "Sei morto in combattimento. La tua avventura è finita.",
+      "actions": [
+        {"type": "end_game"}
+      ]
+    }
+  }
+}
