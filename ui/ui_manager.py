@@ -16,3 +16,8 @@ class ConsoleUIManager:
                 if 0 <= choice_index < len(options):
                     return options[choice_index]['target']
             print("Invalid choice, please enter the correct number.")
+
+
+    def get_text_input(self, prompt_text):
+        print(f"\n{prompt_text}")
+        return input("> ")

@@ -1,0 +1,10 @@
+{
+  "goblin_warrior": {
+    "name": "Goblin Warrior",
+    "hp": 20
+  },
+  "goblin_archer": {
+    "name": "Goblin Archer",
+    "hp": 15
+  }
+}

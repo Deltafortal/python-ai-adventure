@@ -1,9 +1,19 @@
 {
   "meta": {
     "title": "La Caverna del Destino",
-    "start_node": "intro_01"
+    "start_node": "character_creation"
   },
   "nodes": {
+    "character_creation": {
+      "text": "Benvenuto avventuriero. Prima di iniziare, chi sei? Qual è il tuo background e quali sono i tuoi ideali?",
+      "actions": [
+        {
+          "type": "input",
+          "save_as": "player_lore",
+          "target": "intro_01"
+        }
+      ]
+    },
     "intro_01": {
       "text": "L'aria è umida. Ti trovi davanti all'ingresso di una caverna oscura. Senti dei rumori provenire dall'interno.",
       "actions": [
@@ -22,7 +32,7 @@
         {
           "type": "combat",
           "enemies": [
-            {"id": "goblin_warrior", "quantity": 1},
+            {"id": "goblin_warrior", "quantity": 5},
             {"id": "goblin_archer", "quantity": 2}
           ],
           "on_victory": "loot_room",
@@ -44,6 +54,12 @@
     },
     "game_over_flee": {
       "text": "Sei fuggito in preda al panico. Forse l'avventura non fa per te.",
+      "actions": [
+        {"type": "end_game"}
+      ]
+    },
+    "game_over_death": {
+      "text": "Sei morto in combattimento. La tua avventura è finita.",
       "actions": [
         {"type": "end_game"}
       ]
