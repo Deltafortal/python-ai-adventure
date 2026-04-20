@@ -1,4 +1,5 @@
-from core.models import Player
+from core.combat import CombatManager
+from core.models import Player, Skill
 
 class GameEngine:
     def __init__(self, provider, ui_manager):
@@ -7,8 +8,14 @@ class GameEngine:
         self.current_node_id = self.provider.get_start_node()
         self.is_running = True
         
-        # Initialize Player
-        self.player = Player(name="Eroe", hp=100, skills=[])
+        # Inizializziamo il Combat Manager
+        self.combat_manager = CombatManager()
+        
+        # Initialize Skills
+        basic_attack = Skill(name="Strike", description="A basic melee attack", type="damage", duration=0, power=10)
+        
+        # Initialize Player con l'abilità
+        self.player = Player(name="Hero", hp=50, skills=[basic_attack])
 
 
 
@@ -31,6 +38,8 @@ class GameEngine:
         for action in actions:
             action_type = action['type']
 
+
+            # --- INPUT ACTION ---
             if action_type == 'input':
                 user_text = self.ui.get_text_input("Write your background here:")
                 
@@ -38,36 +47,37 @@ class GameEngine:
                 if action['save_as'] == 'player_lore':
                     self.player.lore = user_text
                     self.ui.display_text(f"[SYSTEM: Lore saved! Welcome, {self.player.name}.]")
-                    #print(f"DEBUG LORE: {self.player.lore}")
                 
                 self.current_node_id = action['target']
 
 
 
+            # --- CHOICE ACTION ---
             elif action_type == 'choice':
                 next_node = self.ui.get_choice(action['options'])
                 self.current_node_id = next_node
 
 
 
+            # --- GOTO ACTION ---
             elif action_type == 'goto':
                 input("\n[Press ENTER to continue...]")
                 self.current_node_id = action['target']
 
 
 
+            # --- COMBAT ACTION ---
             elif action_type == 'combat':
-                self.ui.display_text("⚔️ STARTING COMBAT!:")
-
-                for enemy in action['enemies']:
-                    self.ui.display_text(f"  - {enemy['quantity']}x {enemy['id'].replace('_', ' ').title()}")
+                victory = self.combat_manager.start_combat(self.player, action['enemies'], self.ui)
                 
-                input("\n[Press ENTER to continue...]")
-                self.ui.display_text("🏆 You have defeated the monsters!")
-                self.current_node_id = action['on_victory']
+                if victory:
+                    self.current_node_id = action['on_victory']
+                else:
+                    self.current_node_id = action['on_defeat']
 
 
 
+            # --- END GAME ACTION ---
             elif action_type == 'end_game':
                 self.is_running = False
                 self.ui.display_text("\n--- END OF THE ADVENTURE ---\n")
