@@ -1,10 +1,11 @@
-from providers.local_json import LocalJSONProvider
+#from providers.local_json import LocalJSONProvider <-- Local Provider used for testing now replaced by AI
+from providers.ai_generator import AIGeneratorProvider
 from ui.ui_manager import ConsoleUIManager
 from core.engine import GameEngine
 
 
 def main():
-    provider = LocalJSONProvider("data/test_story.json")
+    provider = AIGeneratorProvider(model_name="llama3")
     ui_manager = ConsoleUIManager()
     
 
