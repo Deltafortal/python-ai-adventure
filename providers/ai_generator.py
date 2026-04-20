@@ -4,8 +4,8 @@ import ollama
 
 class AIGeneratorProvider:
 
-    def __init__(self, model_name="llama3", bestiary_path="data/enemies.json"):
 
+    def __init__(self, model_name="llama3", bestiary_path="data/enemies.json"):
         self.model_name = model_name
 
         with open(bestiary_path, 'r', encoding='utf-8') as f:
@@ -18,72 +18,66 @@ class AIGeneratorProvider:
         enemies_list = ", ".join(self.available_enemies)
         
         return f"""
-        Sei il Dungeon Master di un'avventura testuale RPG.
-        Rispondi sempre e solo in formato JSON valido. 
-        Non usare markdown (niente ```json).
+        You are the DUNGEON MASTER of a text-based RPG.
+        You must respond ONLY with a valid JSON object. No markdown or extra text.
 
-        REGOLE DI NARRAZIONE:
-        - Crea una storia coerente con il background del personaggio.
-        - Se il giocatore ha appena vinto un combattimento, descrivi le conseguenze.
-        - Aggiungi un combattimento ogni 3-10 nodi, bilanciando la difficoltà in base alla progressione del giocatore.
-        - Non ripetere mai lo stesso nemico più di 3 volte.
-        - Non creare incongruenze narrativa
-        - Utilizza un linguaggio evocativo e coinvolgente, adatto a un'avventura fantasy.
-        - Non rivelare mai dettagli tecnici o meccaniche di gioco al giocatore.
-        - Crea una storia di crescente ritmo, complessità e tensione, con momenti di respiro narrativo.
-        - Basati su archetipi narrativi classici (eroe, mentore, sfida, ricompensa, tradimento, ecc.) per costruire la trama.
-        - Sfrutta elementi di worldbuilding per rendere il mondo di gioco più immersivo e credibile, ma senza appesantire la narrazione.
-        - Basati su libri, film e giochi fantasy classici per ispirarti, ma crea sempre qualcosa di originale e sorprendente.
-        - Termina l'avventura con un climax narrativo soddisfacente, che risolva le principali tensioni e domande poste durante.
-        - Ogni nodo deve avere un filo conduttore a quello precedente, creando una narrazione fluida e coerente.
-        - Aggiungi il nodo type "end_game" solo quando la storia raggiunge una conclusione naturale, evitando di forzare finali prematuri o insoddisfacenti e MAI prima di 10 nodi.
+        RULES:
+        - Continue the story in a logical manner based on previous events.
+        - If there was just a combat, describe the corpses and loot.
+        - The 'actions' array must contain EXACTLY ONE action object (either a choice or a combat). Never put two together.
 
-        SCHEMA JSON OBBLIGATORIO:
+        JSON SCHEMA TO FOLLOW:
         {{
-          "text": "Descrizione narrativa (max 5 frasi)",
+          "text": "The description of the current scene (max 4 sentences).",
           "actions": [
-             {{ "type": "choice", "options": [{{ "label": "...", "target": "..." }}] }},
-             {{ "type": "combat", "enemies": [{{ "id": "...", "quantity": 1 }}], "on_victory": "...", "on_defeat": "game_over" }},
-             {{ "type": "end_game" }}
+             // INSERT ONE ACTION OBJECT HERE BETWEEN THESE TWO:
+             // OPTION A (Choice): {{ "type": "choice", "options": [{{ "label": "Go north", "target": "invented_node_1" }}, {{ "label": "Explore", "target": "invented_node_2" }}] }}
+             // OPTION B (Combat): {{ "type": "combat", "enemies": [{{ "id": "goblin_warrior", "quantity": 1 }}], "on_victory": "victory_id", "on_defeat": "game_over" }}
           ]
         }}
         
-        LIMITAZIONI NEMICI:
-        Puoi usare SOLO questi ID nemico: {enemies_list}.
+        CONSENTED ENEMIES (if choosing combat): {enemies_list}.
         """
 
 
+
     def get_start_node(self):
-        # TODO: ADD DYNAMIC CHARACTER
         return "character_creation"
 
 
+    def get_node(self, node_id, player_lore="", history=None):
+        if history is None:
+            history = []
 
-    def get_node(self, node_id, player_lore=""):
-
-        # Add Fixed systems nodes
         if node_id == "character_creation":
             return {
-                "text": "Benvenuto avventuriero. Prima di iniziare, dimmi: qual è il tuo background, il tuo carattere e quali sono i tuoi ideali?",
+                "text": "Welcome, adventurer. Before we begin, tell me: what is your background, your personality, and what are your ideals?",
                 "actions": [{"type": "input", "save_as": "player_lore", "target": "ai_start_01"}]
             }
         elif node_id == "game_over":
             return {
-                "text": "La tua avventura finisce qui...",
+                "text": "Your adventure ends here...",
                 "actions": [{"type": "end_game"}]
             }
 
 
 
-
-        # --- AI CALL ---
-        print(f"\n[L'AI sta scrivendo il nodo '{node_id}'...]")
+        print(f"\n[AI is writing the node: '{node_id}'...]")
         
-        user_content = f"Genera il nodo '{node_id}'. "
-        if player_lore:
-            user_content += f" Background giocatore: {player_lore}."
+
+
+        # Buid prompt
+        user_content = f"Background of the player: {player_lore}\n\n"
+        if history:
+            user_content += "RECENT EVENTS IN THE STORY:\n"
+            for past_event in history:
+                user_content += f"- {past_event}\n"
+        
+        user_content += f"\nGenerate the next node (ID: '{node_id}') continuing from these events."
+
 
         try:
+
             response = ollama.chat(
                 model=self.model_name,
                 messages=[
@@ -93,9 +87,10 @@ class AIGeneratorProvider:
                 format='json'
             )
             return json.loads(response['message']['content'])
+        
         except Exception as e:
             print(f"[AI ERROR]: {e}")
             return {
-                "text": "C'è stato un errore nella creazione della realtà.",
-                "actions": [{"type": "choice", "options": [{"label": "Riprova", "target": node_id}]}]
+                "text": "The fabric of space-time vibrates intensely (AI Error).",
+                "actions": [{"type": "choice", "options": [{"label": "Advance cautiously", "target": node_id}]}]
             }
