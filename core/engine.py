@@ -32,7 +32,7 @@ class GameEngine:
             self.ui.display_text(node['text'])
             
             self.story_history.append(node['text'])
-            if len(self.story_history) > 5:
+            if len(self.story_history) > 10:  # Limit history to last 10 entries
                 self.story_history.pop(0)
 
             self.process_actions(node['actions'])
