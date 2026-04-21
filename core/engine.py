@@ -85,4 +85,6 @@ class GameEngine:
             elif action_type == 'end_game':
                 self.is_running = False
                 self.ui.display_text("\n--- END OF THE ADVENTURE ---\n")
+                
+                self.ui.get_choice([{"label": "Close Game", "target": "exit"}])
                 break
