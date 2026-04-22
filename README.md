@@ -52,7 +52,6 @@ python main.py
 
 ## 🔮 Future Roadmap
 
-* [ ] **Phase 3:** Replace the terminal UI with a Graphical User Interface (GUI) using CustomTkinter or PyQt.
 * [ ] **Advanced RPG Mechanics:** Add an inventory system, consumables (e.g., healing potions), and a wider variety of skills.
 * [ ] **Cloud Provider Integration:** Add an alternative provider to support OpenAI/Anthropic APIs alongside the local Ollama provider.
 * [ ] **Add more enemies:** updgrade the list of the available enemies.
