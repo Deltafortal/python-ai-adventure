@@ -6,5 +6,121 @@
   "goblin_archer": {
     "name": "Goblin Archer",
     "hp": 15
+  },
+  "slime": {
+    "name": "Green Slime",
+    "hp": 10
+  },
+  "poison_slime": {
+    "name": "Poison Slime",
+    "hp": 12
+  },
+  "skeleton_soldier": {
+    "name": "Skeleton Soldier",
+    "hp": 25
+  },
+  "armored_knight": {
+    "name": "Armored Knight",
+    "hp": 50
+  },
+  "berserker": {
+    "name": "Berserker",
+    "hp": 35
+  },
+  "assassin": {
+    "name": "Shadow Assassin",
+    "hp": 18
+  },
+  "mage_apprentice": {
+    "name": "Mage Apprentice",
+    "hp": 22
+  },
+  "fire_mage": {
+    "name": "Fire Mage",
+    "hp": 28
+  },
+  "ice_witch": {
+    "name": "Ice Witch",
+    "hp": 30
+  },
+  "necromancer": {
+    "name": "Necromancer",
+    "hp": 40
+  },
+  "dark_priest": {
+    "name": "Dark Priest",
+    "hp": 35
+  },
+  "wolf": {
+    "name": "Wild Wolf",
+    "hp": 18
+  },
+  "alpha_wolf": {
+    "name": "Alpha Wolf",
+    "hp": 30
+  },
+  "giant_spider": {
+    "name": "Giant Spider",
+    "hp": 22
+  },
+  "venom_spider": {
+    "name": "Venom Spider",
+    "hp": 20
+  },
+  "stone_golem": {
+    "name": "Stone Golem",
+    "hp": 80
+  },
+  "iron_golem": {
+    "name": "Iron Golem",
+    "hp": 100
+  },
+  "ghost": {
+    "name": "Restless Ghost",
+    "hp": 25
+  },
+  "phantom": {
+    "name": "Phantom",
+    "hp": 20
+  },
+  "vampire": {
+    "name": "Vampire",
+    "hp": 45
+  },
+  "blood_lord": {
+    "name": "Blood Lord",
+    "hp": 90
+  },
+  "bandit": {
+    "name": "Bandit",
+    "hp": 20
+  },
+  "bandit_leader": {
+    "name": "Bandit Leader",
+    "hp": 40
+  },
+  "war_beast": {
+    "name": "War Beast",
+    "hp": 60
+  },
+  "cursed_armor": {
+    "name": "Cursed Armor",
+    "hp": 70
+  },
+  "mimic": {
+    "name": "Mimic",
+    "hp": 35
+  },
+  "time_watcher": {
+    "name": "Time Watcher",
+    "hp": 50
+  },
+  "void_entity": {
+    "name": "Void Entity",
+    "hp": 120
+  },
+  "ancient_dragon": {
+    "name": "Ancient Dragon",
+    "hp": 200
   }
 }
